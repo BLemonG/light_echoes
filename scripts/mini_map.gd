@@ -3,10 +3,10 @@ class_name MiniMap
 
 const LAYER = 0
 const TILE_ID = 0
-const REVEAL_RADIUS = 3
+const REVEAL_RADIUS = 9
 
 @onready var camera: Camera2D = $"../Camera2D"
-@onready var tilemap: WorldMap = $"../TileMap"
+@onready var tilemap: Map = $"../TileMap"
 @onready var player: Player = $"../Player"
 
 var explored = []
@@ -50,8 +50,8 @@ func reveal_tile_at(tile: Vector2i):
 	explored[tile.x][tile.y] = true
 
 	# Get what kind of tile this is
-	var fg = tilemap.get_cell_source_id(WorldMap.FOREGROUND_LAYER, tile)
+	var fg = tilemap.get_cell_source_id(Map.FOREGROUND_LAYER, tile)
 
-	if fg == WorldMap.ROCK_ID:
+	if fg == Map.ROCK_ID:
 		set_cell(LAYER, tile, TILE_ID, Vector2i(0,0))
 		

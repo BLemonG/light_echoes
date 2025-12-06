@@ -1,21 +1,19 @@
 extends Node2D
 
-@onready var tilemap: WorldMap = $TileMap
+@onready var map: Map = $TileMap
 @onready var player: Player = $Player
 @onready var minimap: MiniMap = $MiniMap
 
 func _ready():
-	tilemap.generate_map()
-	minimap.init_explored(tilemap.map_width, tilemap.map_height)
-	position_player()
-	#tilemap.generate_target()
+	var map_generator = MapGenerator.new()
+	map_generator.generate_map()
+	map.create(map_generator.map)
+	minimap.init_explored(map_generator.width, map_generator.height)
+	position_player(map_generator)
 
-func position_player():
-	var player_position = tilemap.get_player_position()
-	player.global_position = player_position
-	
-func _input(event):
-	pass
+func position_player(map_generator: MapGenerator):
+	var player_cell = map_generator.get_player_cell()
+	player.global_position = player_cell * Map.TILE_SIZE
 	
 func on_target_reached():
 	get_tree().call_deferred("reload_current_scene")
