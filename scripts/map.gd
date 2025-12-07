@@ -14,6 +14,7 @@ var map_width = 0
 var map_height = 0
 
 const PLAYER_FREEDOM = 10
+var floor_tiles = []
 
 func create(map):
 	clear()
@@ -26,6 +27,7 @@ func create(map):
 				set_cell(FOREGROUND_LAYER, tile_position, ROCK_ID, Vector2i(0, 0))
 			elif map[x][y] == MapGenerator.FLOOR:
 				set_cell(BACKGROUND_LAYER, tile_position, BACKGROUND_ID, Vector2i(0, 0))
+				floor_tiles.append(tile_position)
 			elif map[x][y] == MapGenerator.EXIT:
 				set_cell(FOREGROUND_LAYER, tile_position, EXIT_ID, Vector2i(0, 0), 1)
 			
@@ -37,15 +39,29 @@ func create(map):
 		set_cell(FOREGROUND_LAYER, Vector2i(-1, y), ROCK_ID, Vector2i(0, 0))
 		set_cell(FOREGROUND_LAYER, Vector2i(map_width, y), ROCK_ID, Vector2i(0, 0))
 
-func add_air_elements(air_markers: Array[Vector2i], player_pos: Vector2i):
-	var filtered_markers = []
-	for marker in air_markers:
+func filter_markers(markers: Array[Vector2i], player_pos: Vector2i) -> Array[Vector2i]:
+	var filtered_markers: Array[Vector2i] = []
+	for marker in markers:
 		if marker.distance_to(player_pos) <= PLAYER_FREEDOM:
 			continue
 		filtered_markers.append(marker)
 
-	for air_marker in filtered_markers:
-		set_cell(BACKGROUND_LAYER, air_marker, -1, Vector2i(-1, -1), -1)
+	return filtered_markers
+
+func add_air_elements(air_markers: Array[Vector2i], player_pos: Vector2i):
+	var filtered_markers = filter_markers(air_markers, player_pos)
+	# DEBUG visualize
+	#for air_marker in filtered_markers:
+		#set_cell(BACKGROUND_LAYER, air_marker, -1, Vector2i(-1, -1), -1)
 
 func add_ground_elements(ground_markers: Array[Vector2i], player_pos: Vector2i):
-	pass
+	var filtered_markers = filter_markers(ground_markers, player_pos)
+	# DEBUG visualize
+	#for ground_marker in filtered_markers:
+		#set_cell(BACKGROUND_LAYER, ground_marker, -1, Vector2i(-1, -1), -1)
+
+func add_ceiling_elements(ceiling_markers: Array[Vector2i], player_pos: Vector2i):
+	var filtered_markers = filter_markers(ceiling_markers, player_pos)
+	# DEBUG visualize
+	#for ground_marker in filtered_markers:
+		#set_cell(BACKGROUND_LAYER, ground_marker, -1, Vector2i(-1, -1), -1)

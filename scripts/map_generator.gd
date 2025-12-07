@@ -14,10 +14,13 @@ const EXIT := 2
 @export var partition_factor = 4
 @export var markers_density = 3
 @export var markers_spread = 5
+@export var min_wall_markers = 10
+@export var max_wall_markers = 20
 
 var map := []
 var ground_markers: Array[Vector2i] = []
 var air_markers: Array[Vector2i] = []
+var ceiling_markers: Array[Vector2i] = []
 var exit_cell: Vector2i
 
 func get_empty_cell() -> Vector2i: 
@@ -196,13 +199,73 @@ func add_air_markers():
 					air_markers.append(Vector2i(xcoord, ycoord))
 					count += 1
 
-func add_ground_markers():
-	pass
-
 func add_markers():
 	add_air_markers()
-	add_ground_markers()
 
+	var ground_tiles: Array[Vector2i] = []
+	var ceiling_tiles: Array[Vector2i] = []
+	for row in range(height):
+		for column in range(width):
+			if !is_walkable(row, column):
+				continue
+
+			var is_ground1 = is_in_map(column + 1, row - 1, width, height)
+			var is_ground2 = is_in_map(column + 1, row + 1, width, height)
+			var is_ground3 = is_in_map(column + 1, row, width, height)
+			if is_ground1 and is_ground2 and is_ground3:
+				if map[row][column + 1] == WALL and map[row + 1][column + 1] == WALL and map[row - 1][column + 1] == WALL:
+					ground_tiles.append(Vector2i(row, column))
+
+			var is_ceil1 = is_in_map(column - 1, row - 1, width, height)
+			var is_ceil2 = is_in_map(column - 1, row + 1, width, height)
+			var is_ceil3 = is_in_map(column - 1, row, width, height)
+			if is_ceil1 and is_ceil2 and is_ceil3:
+				if map[row - 1][column - 1] == WALL and map[row + 1][column - 1] == WALL and map[row][column - 1] == WALL:
+					ceiling_tiles.append(Vector2i(row, column))
+
+	for i in range(ground_tiles.size() - 1, -1, -1):
+		for j in range(ceiling_tiles.size() - 1, -1, -1):
+			if ground_tiles[i] == ceiling_tiles[j]:
+				var rand_rm = randi_range(0, 1)
+				if rand_rm == 0:
+					ceiling_tiles.remove_at(j)
+				else:
+					ground_tiles.remove_at(i)
+					break
+
+	var random_noground = randi_range(min_wall_markers, max_wall_markers)
+	var max_iterations = 100
+	while max_iterations > 0 and random_noground > 0:
+		max_iterations -= 1
+		var i = randi_range(0, ground_tiles.size() - 1)
+		var ok_distance = true
+		for marker in ground_markers:
+			if marker.distance_to(ground_tiles[i]) <= markers_spread:
+				ok_distance = false
+				break
+
+		if ok_distance == false:
+			continue
+
+		ground_markers.append(ground_tiles[i])
+		random_noground -= 1
+
+	var random_noceiling = randi_range(min_wall_markers, max_wall_markers)
+	max_iterations = 100
+	while max_iterations > 0 and random_noceiling > 0:
+		max_iterations -= 1
+		var i = randi_range(0, ceiling_tiles.size() - 1)
+		var ok_distance = true
+		for marker in ceiling_markers:
+			if marker.distance_to(ceiling_tiles[i]) <= markers_spread:
+				ok_distance = false
+				break
+
+		if ok_distance == false:
+			continue
+
+		ceiling_markers.append(ceiling_tiles[i])
+		random_noceiling -= 1
 
 # ----------------------------------------
 # ROOM + CONNECTIONS

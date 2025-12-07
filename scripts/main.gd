@@ -13,17 +13,19 @@ func _ready():
 	position_player(map_generator)
 	map.add_air_elements(map_generator.air_markers, player.global_position / Map.TILE_SIZE)
 	map.add_ground_elements(map_generator.ground_markers, player.global_position / Map.TILE_SIZE)
+	map.add_ceiling_elements(map_generator.ceiling_markers, player.global_position / Map.TILE_SIZE)
 
 func position_player(map_generator: MapGenerator):
 	var player_cell = null
-	var max_iterations = 30
+	var max_iterations = 50
+
 	while max_iterations > 0:
 		max_iterations -= 1
 		player_cell = map_generator.get_empty_cell()
-		if player_cell.distance_to(map_generator.exit_cell) >= 30:
+		if player_cell.distance_to(map_generator.exit_cell) >= (map.map_width  - 2) / 2:
 			break
 
 	player.global_position = player_cell * Map.TILE_SIZE
-	
+
 func on_target_reached():
 	get_tree().call_deferred("reload_current_scene")
