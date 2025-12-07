@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="big_project"
-config/features=PackedStringArray("4.2", "GL Compatibility")
+run/main_scene="uid://lxq0vdvat0lp"
+config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [rendering]
 

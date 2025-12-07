@@ -11,8 +11,14 @@ const EXIT := 2
 @export var smoothing_iterations := 5
 @export var room_threshold := 50
 @export var wall_threshold := 50
+@export var partition_factor = 4
+@export var markers_density = 3
+@export var markers_spread = 5
 
 var map := []
+var ground_markers: Array[Vector2i] = []
+var air_markers: Array[Vector2i] = []
+var exit_cell: Vector2i
 
 func get_empty_cell() -> Vector2i: 
 	var col = randi_range(0, width-1) 
@@ -32,9 +38,10 @@ func generate_map() -> void:
 		smooth_map()
 	process_map()
 	add_exit()
-	
+
 func add_exit():
 	var cell = get_empty_cell()
+	exit_cell = Vector2i(cell.x, cell.y)
 	map[cell.x][cell.y] = EXIT
 
 # ----------------------------------------
@@ -162,6 +169,39 @@ func get_region_tiles(start_x: int, start_y: int, flags) -> Array:
 						q.append(Vector2i(nx, ny))
 
 	return region
+
+func add_air_markers():
+	for row in range(partition_factor):
+		for column in range(partition_factor):
+			var min_row = row * floor(height / partition_factor)
+			var max_row = (row + 1) * floor(height / partition_factor)
+			var min_column = column * floor(width / partition_factor)
+			var max_column = (column + 1) * floor(width / partition_factor)
+
+			var num_markers = randi_range(0, markers_density)
+			var count = 0
+			var max_iterations = 30
+			while count < num_markers and max_iterations > 0:
+				max_iterations -= 1
+				var xcoord = randi_range(min_row, min(max_row, height - 1))
+				var ycoord = randi_range(min_column, min(max_column, width - 1))
+				var distance_ok = true
+				for marker in air_markers:
+					if marker.distance_to(Vector2i(xcoord, ycoord)) <= markers_spread + randi_range(0, 2):
+						distance_ok = false
+
+				if !is_walkable(xcoord, ycoord) or !distance_ok or get_surrounding_wall_count(xcoord, ycoord) > 0:
+					continue
+				else:
+					air_markers.append(Vector2i(xcoord, ycoord))
+					count += 1
+
+func add_ground_markers():
+	pass
+
+func add_markers():
+	add_air_markers()
+	add_ground_markers()
 
 
 # ----------------------------------------
@@ -307,4 +347,3 @@ class Room:
 
 	func is_room_connected(other):
 		return other in connected_rooms
-

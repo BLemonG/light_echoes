@@ -13,6 +13,8 @@ const EXIT_ID = 4
 var map_width = 0
 var map_height = 0
 
+const PLAYER_FREEDOM = 10
+
 func create(map):
 	clear()
 	map_width = map.size()
@@ -34,3 +36,16 @@ func create(map):
 	for y in range(-1, map_height):	
 		set_cell(FOREGROUND_LAYER, Vector2i(-1, y), ROCK_ID, Vector2i(0, 0))
 		set_cell(FOREGROUND_LAYER, Vector2i(map_width, y), ROCK_ID, Vector2i(0, 0))
+
+func add_air_elements(air_markers: Array[Vector2i], player_pos: Vector2i):
+	var filtered_markers = []
+	for marker in air_markers:
+		if marker.distance_to(player_pos) <= PLAYER_FREEDOM:
+			continue
+		filtered_markers.append(marker)
+
+	for air_marker in filtered_markers:
+		set_cell(BACKGROUND_LAYER, air_marker, -1, Vector2i(-1, -1), -1)
+
+func add_ground_elements(ground_markers: Array[Vector2i], player_pos: Vector2i):
+	pass
