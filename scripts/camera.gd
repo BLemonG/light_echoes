@@ -1,6 +1,6 @@
 extends Camera2D
 
-@onready var player: Player = $"../Player"
+@onready var player: Player = $"../FireFly"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

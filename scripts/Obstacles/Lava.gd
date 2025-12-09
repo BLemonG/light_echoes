@@ -1,0 +1,28 @@
+@tool
+extends Area2D
+
+@onready var texture_rect: TextureRect = $TextureRect
+
+@export var speed: Vector3 = Vector3(0,50,10)
+var off: Vector3 = Vector3.ZERO
+var bodies_in_lava = []
+
+func _ready() -> void:
+	bodies_in_lava = []
+
+func _process(delta: float) -> void:
+	off += speed * delta
+	texture_rect.texture.noise.offset = off
+	
+	for body in bodies_in_lava:
+		print(body, " drowns in lava" )
+
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		bodies_in_lava.append(body)
+		get_tree().call_deferred("reload_current_scene")
+
+
+func _on_body_exited(body: Node2D) -> void:
+	bodies_in_lava.erase(body)

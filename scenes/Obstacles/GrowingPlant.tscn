@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3 uid="uid://b4a7tms0t0w8m"]
+
+[ext_resource type="Texture2D" uid="uid://dip63vuj4syr2" path="res://textures/Enemies/Growing Plants/001.png" id="1_i0ta8"]
+[ext_resource type="Script" uid="uid://bks3jxfwigqri" path="res://scripts/Obstacles/GrowingPlant.gd" id="1_xhddm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhddm"]
+atlas = ExtResource("1_i0ta8")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvcrl"]
+atlas = ExtResource("1_i0ta8")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nbwxm"]
+atlas = ExtResource("1_i0ta8")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oaavg"]
+atlas = ExtResource("1_i0ta8")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ib08v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xhddm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvcrl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nbwxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oaavg")
+}],
+"loop": true,
+"name": &"growing",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xhddm"]
+size = Vector2(30, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nbwxm"]
+radius = 181.02486
+
+[node name="GrowingPlant" type="StaticBody2D"]
+script = ExtResource("1_xhddm")
+grow_speed = 2.0
+max_scale = 10.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_ib08v")
+animation = &"growing"
+frame_progress = 0.8775092
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_xhddm")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_nbwxm")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

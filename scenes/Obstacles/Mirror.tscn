@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0qyij8hsfjiy"]
+
+[ext_resource type="Script" uid="uid://ca7tr044gvkim" path="res://scripts/Obstacles/Mirror.gd" id="1_n6qsb"]
+[ext_resource type="Texture2D" uid="uid://bummkd0iwqivu" path="res://textures/Enemies/64x64.png" id="2_0ngtr"]
+
+[node name="Mirror" type="StaticBody2D"]
+script = ExtResource("1_n6qsb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_0ngtr")
+region_enabled = true
+region_rect = Rect2(384.9001, 835.19995, 63.80002, 56.100037)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -31, 27, 0, 4, 25, -5, 25, -29, 1)

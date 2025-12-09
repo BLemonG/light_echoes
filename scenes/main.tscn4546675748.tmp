@@ -1,0 +1,97 @@
+[gd_scene load_steps=18 format=3 uid="uid://lxq0vdvat0lp"]
+
+[ext_resource type="Script" uid="uid://8nx70rpyxysu" path="res://scripts/main.gd" id="1_aabo0"]
+[ext_resource type="Texture2D" uid="uid://dx36vc0te04h" path="res://textures/rock.jpg" id="3_ppfhr"]
+[ext_resource type="Texture2D" uid="uid://b4a3u1x3qgxu1" path="res://textures/background.jpg" id="4_4yllr"]
+[ext_resource type="PackedScene" uid="uid://bpyhljgrin8ap" path="res://scenes/exit.tscn" id="4_bjw6p"]
+[ext_resource type="Script" uid="uid://b0xo8m0shr1q1" path="res://scripts/map.gd" id="4_m2cq4"]
+[ext_resource type="Script" uid="uid://dbpy5f5u25hi1" path="res://scripts/camera.gd" id="6_fibjp"]
+[ext_resource type="Texture2D" uid="uid://cvqrkif21tgc6" path="res://textures/spotlight_1.png" id="7_choun"]
+[ext_resource type="Texture2D" uid="uid://lo2rfsyyrbd0" path="res://textures/minimap_tile.jpg" id="7_whxs8"]
+[ext_resource type="Script" uid="uid://8vkyu23ccndk" path="res://scripts/mini_map.gd" id="8_u66ay"]
+[ext_resource type="PackedScene" uid="uid://dyalngqcj1yvh" path="res://scripts/Player/FireFly.tscn" id="11_ya4ey"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3ptkp"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6fxkc"]
+texture = ExtResource("3_ppfhr")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ydvc8"]
+texture = ExtResource("4_4yllr")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_ix8fw"]
+scenes/1/scene = ExtResource("4_bjw6p")
+
+[sub_resource type="TileSet" id="TileSet_geelr"]
+tile_size = Vector2i(64, 64)
+physics_layer_0/collision_layer = 1
+physics_layer_0/physics_material = SubResource("PhysicsMaterial_3ptkp")
+sources/2 = SubResource("TileSetAtlasSource_6fxkc")
+sources/3 = SubResource("TileSetAtlasSource_ydvc8")
+sources/4 = SubResource("TileSetScenesCollectionSource_ix8fw")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c0gbj"]
+texture = ExtResource("7_whxs8")
+texture_region_size = Vector2i(4, 4)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_elsag"]
+tile_size = Vector2i(4, 4)
+sources/0 = SubResource("TileSetAtlasSource_c0gbj")
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_aabo0")
+
+[node name="TileMap" type="TileMap" parent="." groups=["environment"]]
+tile_set = SubResource("TileSet_geelr")
+format = 2
+layer_0/name = "background"
+layer_0/tile_data = PackedInt32Array(65537, 4, 65536, 65538, 4, 65536, 2, 4, 65536, 3, 4, 65536, 1, 4, 65536, 0, 4, 65536, -1, 4, 65536, -2, 4, 65536, -65537, 4, 65536, -131072, 4, 65536, -131071, 4, 65536, -65536, 4, 65536, 65535, 4, 65536, 65534, 4, 65536, -65538, 4, 65536)
+layer_1/name = "foreground"
+script = ExtResource("4_m2cq4")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("6_fibjp")
+
+[node name="MiniMap" type="TileMap" parent="." groups=["environment"]]
+position = Vector2(16, 16)
+tile_set = SubResource("TileSet_elsag")
+format = 2
+layer_0/modulate = Color(1, 1, 1, 0.501961)
+script = ExtResource("8_u66ay")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="." groups=["environment"]]
+color = Color(0.0392157, 0.0392157, 0.0392157, 1)
+
+[node name="FireFly" parent="." groups=["player"] instance=ExtResource("11_ya4ey")]
+scale = Vector2(3, 3)
+
+[node name="PointLight2D" type="PointLight2D" parent="FireFly"]
+position = Vector2(64, 64)
+color = Color(0.796078, 0.615686, 0.0235294, 1)
+energy = 2.8
+texture = ExtResource("7_choun")
+texture_scale = 6.0
+
+[node name="NextLevelTimer" type="Timer" parent="FireFly"]
+
+[connection signal="body_entered" from="TileMap/Exit" to="TileMap/Exit" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63480" to="TileMap/@Area2D@63480" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63481" to="TileMap/@Area2D@63481" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63482" to="TileMap/@Area2D@63482" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63483" to="TileMap/@Area2D@63483" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63484" to="TileMap/@Area2D@63484" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63485" to="TileMap/@Area2D@63485" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63486" to="TileMap/@Area2D@63486" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63487" to="TileMap/@Area2D@63487" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63488" to="TileMap/@Area2D@63488" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63489" to="TileMap/@Area2D@63489" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63490" to="TileMap/@Area2D@63490" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63491" to="TileMap/@Area2D@63491" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63492" to="TileMap/@Area2D@63492" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@63493" to="TileMap/@Area2D@63493" method="_on_body_entered"]

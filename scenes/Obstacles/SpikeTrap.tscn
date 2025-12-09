@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://cafh1tjqqqg6n"]
+
+[ext_resource type="Script" uid="uid://k7rgkd4vybqa" path="res://scripts/Obstacles/SpikeTrap.gd" id="1_ffp8i"]
+[ext_resource type="Texture2D" uid="uid://gtuhyys41gh4" path="res://textures/Enemies/long_metal/long_metal_spike_01.png" id="2_32jj2"]
+[ext_resource type="Texture2D" uid="uid://dvdnibpxe0hrf" path="res://textures/Enemies/long_metal/long_metal_spike_04.png" id="3_ibj87"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ffp8i"]
+size = Vector2(89, 132)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ffp8i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_32jj2")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ibj87")
+}],
+"loop": true,
+"name": &"spike",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6csfp"]
+radius = 604.07367
+
+[node name="SpikeTrap" type="Area2D"]
+rotation = 3.1415927
+script = ExtResource("1_ffp8i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -10)
+shape = SubResource("RectangleShape2D_ffp8i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ffp8i")
+animation = &"idle"
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(1, -1)
+shape = SubResource("CircleShape2D_6csfp")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

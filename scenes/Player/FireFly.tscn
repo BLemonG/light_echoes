@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://dyalngqcj1yvh"]
+
+[ext_resource type="Texture2D" uid="uid://btxmj0ii8w6jo" path="res://textures/Enemies/spritesheet_white_dove.png" id="1_0thwt"]
+[ext_resource type="Script" uid="uid://7ryoxqe1gyvq" path="res://scripts/Player/FireFly.gd" id="1_bo3ie"]
+[ext_resource type="PackedScene" uid="uid://fu5mrgive83m" path="res://scenes/Player/Beam.tscn" id="3_bjiw6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bo3ie"]
+size = Vector2(19, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7m0cp"]
+atlas = ExtResource("1_0thwt")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3prea"]
+atlas = ExtResource("1_0thwt")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rnf13"]
+atlas = ExtResource("1_0thwt")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ag7j2"]
+atlas = ExtResource("1_0thwt")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ckns8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7m0cp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3prea")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rnf13")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ag7j2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="FireFly" type="CharacterBody2D"]
+script = ExtResource("1_bo3ie")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_bo3ie")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ckns8")
+
+[node name="BeamLine" type="Line2D" parent="."]
+
+[node name="Beam" parent="." instance=ExtResource("3_bjiw6")]

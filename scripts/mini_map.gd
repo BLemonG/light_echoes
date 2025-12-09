@@ -7,7 +7,8 @@ const REVEAL_RADIUS = 9
 
 @onready var camera: Camera2D = $"../Camera2D"
 @onready var tilemap: Map = $"../TileMap"
-@onready var player: Player = $"../Player"
+@onready var player: Player = $"../FireFly"
+
 
 var explored = []
 

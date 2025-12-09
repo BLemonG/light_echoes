@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://dtx357x8yw7ud"]
+
+[ext_resource type="Script" uid="uid://bunn6h528vx4o" path="res://scripts/Obstacles/Lava.gd" id="1_hsnng"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nlui7"]
+size = Vector2(509, 511)
+
+[sub_resource type="Gradient" id="Gradient_ldk10"]
+offsets = PackedFloat32Array(0, 0.42, 0.6933333, 0.8666667, 1)
+colors = PackedColorArray(0.5568628, 0, 0, 1, 0.7411765, 0.034640525, 0.012418302, 1, 1, 0.5764706, 0.14901961, 1, 1, 0.7607843, 0.15294118, 1, 18.892157, 14.59599, 3.6794968, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rcvbr"]
+frequency = 0.004
+offset = Vector3(0, 13760.178, 2750.9272)
+fractal_type = 3
+fractal_octaves = 2
+fractal_lacunarity = 1.4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uhooe"]
+noise = SubResource("FastNoiseLite_rcvbr")
+color_ramp = SubResource("Gradient_ldk10")
+in_3d_space = true
+
+[node name="Area2D" type="Area2D"]
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_hsnng")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(254.5, 255.5)
+shape = SubResource("RectangleShape2D_nlui7")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("NoiseTexture2D_uhooe")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

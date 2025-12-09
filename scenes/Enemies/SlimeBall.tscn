@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://cejyv8lbknxu6"]
+
+[ext_resource type="Script" uid="uid://mu7t42h2gb1v" path="res://scripts/Enemies/SlimeBall.gd" id="1_tt3bm"]
+[ext_resource type="Texture2D" uid="uid://beojm4extrd4e" path="res://textures/Enemies/Projectile_slime.png" id="2_fmf1x"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fwmgb"]
+radius = 4.204759
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o3aim"]
+atlas = ExtResource("2_fmf1x")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5wak"]
+atlas = ExtResource("2_fmf1x")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m22tb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o3aim")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w5wak")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xslnq"]
+radius = 27.018513
+
+[node name="SlimeBall" type="RigidBody2D"]
+script = ExtResource("1_tt3bm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(5, 5)
+shape = SubResource("CircleShape2D_fwmgb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_m22tb")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_xslnq")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
