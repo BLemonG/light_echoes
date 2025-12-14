@@ -4,6 +4,7 @@ class_name EnemyBase
 enum States { IDLE, CHASE, ATTACK }
 enum Reactivity {REACT_TO_BEAM, REACT_TO_PARTICLE, REACT_TO_BOTH}
 var state = States.IDLE
+var is_visible_on_screen = false
 
 @export var reactivity: Reactivity = Reactivity.REACT_TO_BEAM
 
@@ -11,6 +12,8 @@ var state = States.IDLE
 @onready var ray: RayCast2D = $RayCast2D
 @onready var timer: Timer = $Timer
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var vis_notifier: VisibleOnScreenEnabler2D = $VisibleOnScreenEnabler2D
+@onready var attack_cooldown: Timer = $AttackCooldown
 
 var direction: Vector2 = Vector2.ZERO
 var SPEED: float = 0.0
@@ -21,6 +24,9 @@ func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	timer.one_shot = true
 	add_to_group("enemy")
+	
+	attack_cooldown.wait_time = 2.0
+	attack_cooldown.one_shot = true
 
 func _physics_process(delta):
 	if !player:
@@ -110,3 +116,11 @@ func stop_chase() -> void:
 
 func _on_timer_timeout() -> void:
 	state = States.IDLE
+
+
+func _on_visible_on_screen_enabler_2d_screen_entered() -> void:
+	is_visible_on_screen = true
+
+
+func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+	is_visible_on_screen = false

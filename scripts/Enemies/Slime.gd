@@ -10,7 +10,6 @@ class_name JumpingEnemy
 
 const SLIME_BALL = preload("uid://cejyv8lbknxu6")
 @export var THROW_FORCE := 2.0
-var can_shoot: bool = true
 
 func _ready():
 	super._ready()
@@ -47,11 +46,9 @@ func perform_attack(delta):
 		velocity.x = direction.x * SPEED
 		velocity.y = -JUMP_IMPULSE
 		
-	if can_shoot: 
+	if attack_cooldown.is_stopped(): 
 		shoot_slimeball()
-		can_shoot = false
-		await get_tree().create_timer(2).timeout
-		can_shoot = true
+		attack_cooldown.start()
 	
 	update_sprite_and_ray("attack","left")
 	move_and_slide()
@@ -74,4 +71,3 @@ func shoot_slimeball():
 	var vx = dx/t
 	var vy = (dy + 0.5 * GRAVITY * t * t) / t
 	ball.linear_velocity = Vector2(vx * THROW_FORCE,vy * THROW_FORCE)
-	print(ball.linear_velocity)

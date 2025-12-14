@@ -28,6 +28,7 @@ animations = [{
 }]
 
 [node name="Web" type="Area2D"]
+z_index = 1
 script = ExtResource("1_vms3v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

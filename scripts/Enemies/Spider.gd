@@ -29,9 +29,7 @@ func _ready():
 func spawn_webs():
 	for i in range(NUMBER_WEBS):
 		var web = WEB.instantiate()
-		if not get_tree():
-			await(0.5)		#it sometimes crahses here, just weak bridge
-		var root = get_tree().current_scene
+		var root = get_tree().root.get_child(0)	#msg me if error occurs here
 		root.add_child(web)
 		web.scale = Vector2(WEB_SIZE, WEB_SIZE)
 		var angle = randf() * TAU
@@ -63,11 +61,15 @@ func perform_chase(delta):
 		move_and_slide()
 
 func perform_attack(delta):
+	if not attack_cooldown.is_stopped():
+		velocity = Vector2.ZERO	 
+		return
 	if player_is_trapped:
 		bite()
+		attack_cooldown.start()
 		velocity = direction * SPEED
 		update_sprite_and_ray("attack","left")
 		move_and_slide()
 		
 func bite():
-	get_tree().call_deferred("reload_current_scene")
+	player.take_damage()

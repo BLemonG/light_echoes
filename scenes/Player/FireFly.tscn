@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://dyalngqcj1yvh"]
+[gd_scene load_steps=12 format=3 uid="uid://dyalngqcj1yvh"]
 
 [ext_resource type="Texture2D" uid="uid://btxmj0ii8w6jo" path="res://textures/Enemies/spritesheet_white_dove.png" id="1_0thwt"]
 [ext_resource type="Script" uid="uid://7ryoxqe1gyvq" path="res://scripts/Player/FireFly.gd" id="1_bo3ie"]
 [ext_resource type="PackedScene" uid="uid://fu5mrgive83m" path="res://scenes/Player/Beam.tscn" id="3_bjiw6"]
+[ext_resource type="PackedScene" uid="uid://c25mo4jdm6w75" path="res://scenes/Player/PlayerUI.tscn" id="4_y75uk"]
+[ext_resource type="PackedScene" uid="uid://du4x8pws7r0i" path="res://scenes/Player/Sparkle.tscn" id="5_d78j5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bo3ie"]
 size = Vector2(19, 18)
@@ -56,3 +58,7 @@ sprite_frames = SubResource("SpriteFrames_ckns8")
 [node name="BeamLine" type="Line2D" parent="."]
 
 [node name="Beam" parent="." instance=ExtResource("3_bjiw6")]
+
+[node name="PlayerUI" parent="." instance=ExtResource("4_y75uk")]
+
+[node name="Sparkle" parent="." instance=ExtResource("5_d78j5")]

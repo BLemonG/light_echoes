@@ -1,0 +1,122 @@
+[gd_scene load_steps=12 format=3 uid="uid://c25mo4jdm6w75"]
+
+[ext_resource type="Script" uid="uid://bdmpss460mlol" path="res://scripts/Player/PlayerUI.gd" id="1_qrcsu"]
+[ext_resource type="Script" uid="uid://cs2eobtca4g82" path="res://scripts/Player/ScoreLabel.gd" id="2_fhtas"]
+[ext_resource type="Texture2D" uid="uid://clparvd7ida8v" path="res://textures/heart_animated_1.png" id="3_0de7s"]
+[ext_resource type="Texture2D" uid="uid://batp6x3ihw0hk" path="res://textures/64x64.png" id="4_00jy4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pf331"]
+atlas = ExtResource("3_0de7s")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b1whj"]
+atlas = ExtResource("3_0de7s")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tn7b"]
+atlas = ExtResource("3_0de7s")
+region = Rect2(17, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_50c3i"]
+atlas = ExtResource("3_0de7s")
+region = Rect2(34, 0, 17, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5mut0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pf331")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b1whj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3tn7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_50c3i")
+}],
+"loop": true,
+"name": &"lowLife",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5mut0"]
+atlas = ExtResource("4_00jy4")
+region = Rect2(386.32504, 3201.3438, 62.95636, 60.02832)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5yfbw"]
+atlas = ExtResource("4_00jy4")
+region = Rect2(393.40747, 4351.1807, 60.028137, 64.42041)
+
+[node name="Node2D" type="CanvasLayer"]
+script = ExtResource("1_qrcsu")
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -34.0
+offset_right = 40.0
+grow_vertical = 0
+script = ExtResource("2_fhtas")
+
+[node name="HealthBar" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(40, 0)
+offset_left = 22.0
+offset_top = 22.0
+offset_right = 72.0
+offset_bottom = 22.0
+metadata/_edit_group_ = true
+
+[node name="Heart" type="TextureRect" parent="HealthBar"]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart"]
+sprite_frames = SubResource("SpriteFrames_5mut0")
+animation = &"idle"
+frame_progress = 0.71828413
+
+[node name="Heart2" type="TextureRect" parent="HealthBar"]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart2"]
+sprite_frames = SubResource("SpriteFrames_5mut0")
+animation = &"lowLife"
+frame_progress = 0.6505615
+
+[node name="Heart3" type="TextureRect" parent="HealthBar"]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart3"]
+sprite_frames = SubResource("SpriteFrames_5mut0")
+animation = &"lowLife"
+frame_progress = 0.6505615
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -126.0
+offset_bottom = 64.0
+grow_horizontal = 0
+
+[node name="WebbedIcon" type="TextureRect" parent="StatusEffectsContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_5mut0")
+
+[node name="SlimedIcon" type="TextureRect" parent="StatusEffectsContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_5yfbw")
+
+[connection signal="timeout" from="Timer" to="ScoreLabel" method="_on_timer_timeout"]

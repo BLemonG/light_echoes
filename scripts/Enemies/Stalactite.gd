@@ -39,8 +39,9 @@ func perform_attack(delta):
 		var c = collision.get_collider()
 		if c.is_in_group("player"):
 			hit()
-		if c.is_in_group("enemy"):
-			print("hit enemy")
+		if c.is_in_group("enemy") and c.is_visible_on_screen:
+			print("stac hit enemy (+10 points)")
+			PlayerStats.add_points(10)
 			c.queue_free()
 			queue_free()		
 		else:

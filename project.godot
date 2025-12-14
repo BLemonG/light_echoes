@@ -14,6 +14,10 @@ config/name="big_project"
 run/main_scene="uid://lxq0vdvat0lp"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 
+[autoload]
+
+PlayerStats="*res://scripts/Singleton/PlayerStats.gd"
+
 [global_group]
 
 player=""

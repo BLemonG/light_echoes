@@ -2,8 +2,8 @@
 
 TODO:
 	- better lava placement
-	- fix GrowingPlant collider
 	- fix Spike spwan
 	- sometimes broke at Spider.gd when creating webs (observe if consists)
-	- add Player interactions (healt bar, one life? currently just reset)
-	- UI
+	- sounds
+	- GrowingPlant not finding Area2D (bug?)
+	- set map to lower right corner

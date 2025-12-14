@@ -6,7 +6,6 @@ class_name FlyingEnemy
 @export var FLY_PERCEPTION_RANGE: float = 300
 @export var WAIT_UNTIL_IDLE: float = 3
 
-
 func _ready():
 	super._ready()
 	SPEED = FLY_SPEED
@@ -30,10 +29,15 @@ func perform_chase(delta):
 	move_and_slide()
 
 func perform_attack(delta):
+	if not attack_cooldown.is_stopped():
+		velocity = Vector2.ZERO	 #fly without attack
+		return
+	bite()
+	attack_cooldown.start()
 	velocity = velocity.move_toward(direction * SPEED, 200 * delta)
 	update_sprite_and_ray("attack", "left")
-	bite()
+
 	move_and_slide()
 	
 func bite():
-	get_tree().call_deferred("reload_current_scene")
+	player.take_damage()
