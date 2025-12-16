@@ -6,6 +6,7 @@ extends Node2D
 
 const SCENES = {
 	"BAT": preload("res://scenes/Enemies/Bat.tscn"),
+	#"MOTH": preload("res://scenes/Enemies/Moth.tscn"),
 	"STACTALITE": preload("res://scenes/Enemies/Stalactite.tscn"),
 	"SPIDER": preload("res://scenes/Enemies/Spider.tscn"),
 	"SLIME": preload("res://scenes/Enemies/Slime.tscn"),

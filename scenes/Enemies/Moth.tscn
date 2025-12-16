@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://bo413oj7ualyj"]
+
+[ext_resource type="PackedScene" uid="uid://ddtw1de31gtve" path="res://scenes/EnemyTemplate/EnemyBase.tscn" id="1_ddarh"]
+[ext_resource type="Script" uid="uid://3by08djo22qk" path="res://scripts/Enemies/moth.gd" id="2_4c1do"]
+[ext_resource type="Texture2D" uid="uid://kge7s8oof78x" path="res://textures/Assets/Moth.png" id="3_4c1do"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ddarh"]
+atlas = ExtResource("3_4c1do")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v5fk5"]
+atlas = ExtResource("3_4c1do")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kubtn"]
+atlas = ExtResource("3_4c1do")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1nla2"]
+atlas = ExtResource("3_4c1do")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uylkx"]
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"atack",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ddarh")
+}],
+"loop": false,
+"name": &"dying",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v5fk5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kubtn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1nla2")
+}],
+"loop": true,
+"name": &"flying",
+"speed": 15.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c87qa"]
+radius = 13.670732
+
+[node name="CharacterBody2D" groups=["enemies"] instance=ExtResource("1_ddarh")]
+scale = Vector2(3, 3)
+script = ExtResource("2_4c1do")
+FLY_SPEED = 200.0
+FLY_ATTACK_RANGE = 80.0
+FLY_PERCEPTION_RANGE = 300.0
+WAIT_UNTIL_IDLE = 3.0
+
+[node name="AnimatedSprite2D" parent="." index="1"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_uylkx")
+animation = &"flying"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." index="6"]
+
+[node name="Area2D" type="Area2D" parent="." index="7"]
+position = Vector2(2, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" index="0"]
+position = Vector2(-2, 0)
+shape = SubResource("CircleShape2D_c87qa")
