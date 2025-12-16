@@ -29,8 +29,7 @@ func _ready():
 func spawn_webs():
 	for i in range(NUMBER_WEBS):
 		var web = WEB.instantiate()
-		var root = get_tree().root.get_child(0)	#msg me if error occurs here
-		root.add_child(web)
+		get_parent().add_child(web)
 		web.scale = Vector2(WEB_SIZE, WEB_SIZE)
 		var angle = randf() * TAU
 		var dist = randf() * WEB_RADIUS

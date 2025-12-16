@@ -33,7 +33,7 @@ func _on_detection_area_body_exited(body: Node2D) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		get_tree().call_deferred("reload_current_scene")
+		body.die()
 	if body.is_in_group("enemy") and body.is_visible_on_screen:
 		body.queue_free()
 		print("spike hit enemy (+10 points)")

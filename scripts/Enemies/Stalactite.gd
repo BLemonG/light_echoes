@@ -38,7 +38,7 @@ func perform_attack(delta):
 	if collision:
 		var c = collision.get_collider()
 		if c.is_in_group("player"):
-			hit()
+			c.die()
 		if c.is_in_group("enemy") and c.is_visible_on_screen:
 			print("stac hit enemy (+10 points)")
 			PlayerStats.add_points(10)
@@ -46,6 +46,3 @@ func perform_attack(delta):
 			queue_free()		
 		else:
 			queue_free()
-	
-func hit():
-	get_tree().call_deferred("reload_current_scene")
