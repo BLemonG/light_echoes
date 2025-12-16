@@ -135,3 +135,5 @@ animation = &"dying"
 frame_progress = 0.07419275
 
 [node name="WebContainer" type="Node2D" parent="." index="4"]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." index="7"]

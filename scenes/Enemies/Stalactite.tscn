@@ -84,3 +84,5 @@ texture_filter = 1
 rotation = 3.1415927
 sprite_frames = SubResource("SpriteFrames_5n2j5")
 animation = &"falling"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." index="6"]

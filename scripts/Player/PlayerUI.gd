@@ -7,6 +7,7 @@ extends CanvasLayer
 	"webbed": $StatusEffectsContainer/WebbedIcon,
 	"slimed": $StatusEffectsContainer/SlimedIcon
 }
+@onready var damage_flash_rect = $DamageFlash
 
 @export var FONT_SIZE: int = 25
 @export var HEART_SCALE: float = 2.0
@@ -32,3 +33,9 @@ func _on_effect_added(effect: String) -> void:
 func _on_effect_removed(effect: String) -> void:
 	if effect_icons.has(effect):
 		effect_icons[effect].visible = false
+		
+func damage_flash():
+	damage_flash_rect.color = Color.RED
+	damage_flash_rect.modulate.a = 0.7
+	var tween = create_tween()
+	tween.tween_property(damage_flash_rect, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

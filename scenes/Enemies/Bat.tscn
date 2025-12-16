@@ -1,12 +1,37 @@
-[gd_scene load_steps=24 format=3 uid="uid://bmcj8etaf3ho"]
+[gd_scene load_steps=30 format=3 uid="uid://bmcj8etaf3ho"]
 
 [ext_resource type="PackedScene" uid="uid://ddtw1de31gtve" path="res://scenes/EnemyTemplate/EnemyBase.tscn" id="1_mokt8"]
 [ext_resource type="Script" uid="uid://ba30tn0lerekg" path="res://scripts/Enemies/Bat.gd" id="2_c87qa"]
+[ext_resource type="Texture2D" uid="uid://drnwe5qhd0xap" path="res://textures/Assets/BatAtack.png" id="3_c87qa"]
 [ext_resource type="Texture2D" uid="uid://c6ryi125iuf2p" path="res://textures/Assets/Bat.png" id="3_mokt8"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mokt8"]
-atlas = ExtResource("3_mokt8")
-region = Rect2(0, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_o6t01"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4s0m"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iw0hu"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26os5"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_me1du"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5c5o"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxh5j"]
+atlas = ExtResource("3_c87qa")
+region = Rect2(32, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c87qa"]
 atlas = ExtResource("3_mokt8")
@@ -56,10 +81,6 @@ region = Rect2(32, 0, 32, 32)
 atlas = ExtResource("3_mokt8")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_o6t01"]
-atlas = ExtResource("3_mokt8")
-region = Rect2(96, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_77oby"]
 atlas = ExtResource("3_mokt8")
 region = Rect2(0, 32, 32, 32)
@@ -84,11 +105,29 @@ region = Rect2(0, 64, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_mokt8")
+"texture": SubResource("AtlasTexture_o6t01")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4s0m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iw0hu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_26os5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_me1du")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5c5o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxh5j")
 }],
-"loop": true,
+"loop": false,
 "name": &"atack",
-"speed": 5.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -133,9 +172,6 @@ animations = [{
 "texture": SubResource("AtlasTexture_kvp4y")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_o6t01")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_77oby")
 }, {
 "duration": 1.0,
@@ -152,13 +188,13 @@ animations = [{
 }],
 "loop": true,
 "name": &"flying",
-"speed": 15.0
+"speed": 20.0
 }]
 
 [node name="CharacterBody2D" instance=ExtResource("1_mokt8")]
 scale = Vector2(3, 3)
 script = ExtResource("2_c87qa")
-FLY_SPEED = 100.0
+FLY_SPEED = 200.0
 FLY_ATTACK_RANGE = 80.0
 FLY_PERCEPTION_RANGE = 300.0
 WAIT_UNTIL_IDLE = 3.0
@@ -166,4 +202,8 @@ WAIT_UNTIL_IDLE = 3.0
 [node name="AnimatedSprite2D" parent="." index="1"]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_uylkx")
-animation = &"flying"
+animation = &"atack"
+frame = 5
+frame_progress = 1.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." index="6"]
