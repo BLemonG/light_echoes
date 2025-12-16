@@ -98,6 +98,7 @@ custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart2"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_5mut0")
 animation = &"lowLife"
 frame_progress = 0.6505615
@@ -107,6 +108,7 @@ custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart3"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_5mut0")
 animation = &"lowLife"
 frame_progress = 0.6505615

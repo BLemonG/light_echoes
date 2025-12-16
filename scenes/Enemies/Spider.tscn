@@ -129,7 +129,6 @@ WEB_SIZE = 5.0
 
 [node name="AnimatedSprite2D" parent="." index="1"]
 texture_filter = 1
-position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_22pw6")
 animation = &"dying"
 frame_progress = 0.07419275

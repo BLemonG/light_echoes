@@ -55,8 +55,6 @@ func _physics_process(delta):
 		move_light(delta)
 	else:
 		move_particle()
-			
-	# Slimed logic
 	if slimed:
 		velocity.x *= SLIME_EFFECT.x
 		velocity.y += SLIME_EFFECT.y * delta
@@ -112,7 +110,6 @@ func move_light(delta: float):
 			trail_line.add_point(final_pos)
 
 func toggle_mode():
-	# Protección: Si estamos parados, asegurar dirección
 	if particle_mode and aim_dir == Vector2.ZERO: aim_dir = Vector2.RIGHT
 
 	particle_mode = !particle_mode
@@ -120,15 +117,11 @@ func toggle_mode():
 	is_transforming = true 
 	
 	if beam_mode:
-		# --- ENTRANDO A MODO LUZ ---
 		sprite.play("to_light")
 		time_elapsed = 0.0
 		
 		if trail_line: 
-			# 1. Aseguramos que sea visible (por si venimos de un fade out)
 			trail_line.modulate.a = 1.0
-			
-			# 2. Reseteamos la línea y el historial
 			trail_line.clear_points()
 			path_history.clear()
 			
@@ -141,17 +134,11 @@ func toggle_mode():
 			path_history.push_front(start_data)
 			
 	else:
-		# --- SALIENDO A MODO PARTÍCULA (El arreglo está aquí) ---
 		sprite.play("to_particle")
 		
 		if trail_line:
-			# Creamos un Tween para desvanecer la línea suavemente
 			var tween = create_tween()
-			
-			# Hacemos que la propiedad 'modulate:a' (Alpha/Transparencia) baje a 0 en 0.2 segundos
 			tween.tween_property(trail_line, "modulate:a", 0.0, 0.2)
-			
-			# Cuando termine la animación (0.2s después), limpiamos todo
 			tween.tween_callback(func():
 				trail_line.clear_points()
 				path_history.clear()
@@ -207,3 +194,16 @@ func is_particle_mode(): return particle_mode
 func is_beam_mode(): return beam_mode
 func get_beam_origin(): return global_position
 func get_beam_direction(): return aim_dir
+
+func _on_hitbox_body_entered(body: Node2D) -> void:
+	print("El HitBox ha tocado a: ", body.name)
+
+	if beam_mode:
+		if body.is_in_group("enemies"):
+			print("¡ES UN ENEMIGO! Intentando matar...")
+			if body.has_method("die"):
+				body.die()
+			else:
+				print("ERROR: El enemigo no tiene función die()")
+		else:
+			print("Lo que he tocado NO está en el grupo 'enemies'")

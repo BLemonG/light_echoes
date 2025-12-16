@@ -5,6 +5,8 @@ class_name FlyingEnemy
 @export var FLY_ATTACK_RANGE: float = 80
 @export var FLY_PERCEPTION_RANGE: float = 300
 @export var WAIT_UNTIL_IDLE: float = 3
+@onready var animated: AnimatedSprite2D = $AnimatedSprite2D
+@onready var collision: CollisionShape2D = $CollisionShape2D
 
 func _ready():
 	super._ready()
@@ -41,3 +43,11 @@ func perform_attack(delta):
 	
 func bite():
 	player.take_damage()
+	
+func die():
+	set_physics_process(false)
+	collision.set_deferred("disabled", true)
+	animated.play("dying")
+	await sprite.animation_finished
+	queue_free()
+	
