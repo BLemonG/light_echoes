@@ -1,8 +1,7 @@
-[gd_scene load_steps=42 format=3 uid="uid://dyalngqcj1yvh"]
+[gd_scene load_steps=41 format=3 uid="uid://dyalngqcj1yvh"]
 
 [ext_resource type="Script" uid="uid://7ryoxqe1gyvq" path="res://scripts/Player/FireFly.gd" id="1_bo3ie"]
 [ext_resource type="Texture2D" uid="uid://dy12x3d8m23kq" path="res://textures/Assets/Firefly.png" id="2_d78j5"]
-[ext_resource type="PackedScene" uid="uid://fu5mrgive83m" path="res://scenes/Player/Beam.tscn" id="3_bjiw6"]
 [ext_resource type="Texture2D" uid="uid://kjnkpxy2h384" path="res://textures/Assets/ball2.png" id="3_lb2sn"]
 [ext_resource type="PackedScene" uid="uid://c25mo4jdm6w75" path="res://scenes/UI/PlayerUI.tscn" id="4_y75uk"]
 [ext_resource type="PackedScene" uid="uid://du4x8pws7r0i" path="res://scenes/Player/Sparkle.tscn" id="5_d78j5"]
@@ -251,12 +250,12 @@ animations = [{
 }]
 
 [sub_resource type="Curve" id="Curve_lb2sn"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2771739, 0.32584274), 1.0693531, 1.0693531, 0, 0, Vector2(1, 0.6516854), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.70786524), 0.0, 0.0, 0, 0, Vector2(0.5380435, 0.6516854), 0.0, 0.0, 0, 0, Vector2(1, 0.078651786), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_6jcmr"]
-offsets = PackedFloat32Array(0, 0.43835616, 1)
-colors = PackedColorArray(1, 0.99215686, 0.8627451, 0, 1, 0.5529412, 0, 0.4509804, 1, 0.84313726, 0, 1)
+offsets = PackedFloat32Array(0.26027396, 0.7123288, 1)
+colors = PackedColorArray(1, 0.84313726, 0, 1, 1, 0.5529412, 0, 0.4509804, 1, 0.99215686, 0.8627451, 0)
 
 [node name="FireFly" type="CharacterBody2D"]
 script = ExtResource("1_bo3ie")
@@ -272,12 +271,9 @@ animation = &"to_light"
 
 [node name="TrailLine" type="Line2D" parent="."]
 texture_filter = 1
-width = 5.0
 width_curve = SubResource("Curve_lb2sn")
 gradient = SubResource("Gradient_6jcmr")
 joint_mode = 2
-
-[node name="Beam" parent="." instance=ExtResource("3_bjiw6")]
 
 [node name="PlayerUI" parent="." instance=ExtResource("4_y75uk")]
 

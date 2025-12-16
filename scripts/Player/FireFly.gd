@@ -1,20 +1,19 @@
 extends CharacterBody2D
 class_name Player
 
-# --- REFERENCIAS ---
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var trail_line: Line2D = $TrailLine 
 @onready var sparkles: GPUParticles2D = $Sparkle
 @onready var ui: CanvasLayer = $PlayerUI
 @onready var next_level_timer: Timer = $NextLevelTimer
 
-# --- CONFIGURACIÓN ---
 var SPEED = 220.0 
 @export var SPEED_LIGHT = 240.0 
 @export var wave_frequency: float = 20.0 
-@export var wave_amplitude: float = 50.0 # Aumentado para que se note la curva
+@export var wave_amplitude: float = 40.0 
+@export var wave_growth_speed: float = 8.0 
 
-# --- ESTADOS ---
+
 var particle_mode := true
 var beam_mode := false
 var is_transforming := false 
@@ -22,10 +21,10 @@ var aim_dir = Vector2.RIGHT
 var time_elapsed: float = 0.0
 var slimed = false
 var timer = 0.0
+var path_history: Array = []
 @export var SLIMED_TIMER = 5.0
 @export var SLIME_EFFECT = Vector2(0.7, 10000)
 
-# --- SALUD ---
 var hearts_list: Array[TextureRect] = []
 var health = 3
 var dead = false
@@ -37,11 +36,8 @@ func _ready():
 		trail_line.top_level = true
 		trail_line.global_position = Vector2.ZERO
 		trail_line.z_index = 100 
-		trail_line.width = 30.0
-		trail_line.default_color = Color.RED 
 		trail_line.clear_points()
-	else:
-		print("ERROR CRITICO: No se encuentra el nodo TrailLine en el Player")
+
 
 	if ui and ui.has_node("HealthBar"):
 		var hearts_patent = ui.get_node("HealthBar")
@@ -89,52 +85,77 @@ func move_particle():
 	if not is_transforming: sprite.play("flying")
 
 func move_light(delta: float):
-	# Aseguramos que aim_dir no sea cero
 	if aim_dir == Vector2.ZERO: aim_dir = Vector2.RIGHT
-		
 	velocity = aim_dir * SPEED_LIGHT
 	
-	# --- GENERACIÓN DEL TRAIL ---
 	if trail_line:
 		time_elapsed += delta
+		var new_point_data = {
+			"center_pos": global_position,     
+			"normal": aim_dir.orthogonal(),     
+			"spawn_time": time_elapsed          
+		}
+		path_history.push_front(new_point_data)
 		
-		# Matemática de la onda
-		var wave_offset = sin(time_elapsed * wave_frequency) * wave_amplitude
-		var perp_direction = aim_dir.orthogonal() # Dirección a los lados (90 grados)
+		if path_history.size() > 300:
+			path_history.pop_back()
+
+		trail_line.clear_points()
 		
-		# Calculamos dónde dibujar el punto
-		# offset_atras: Mueve el punto de spawn a la cola del personaje
-		var offset_atras = aim_dir * 20.0 
-		var spawn_pos = global_position - offset_atras
-		
-		# Punto final con la oscilación
-		var final_point = spawn_pos + (perp_direction * wave_offset)
-		
-		trail_line.add_point(final_point)
-		
-		# Debug en consola: Si ves esto, el código se ejecuta
-		# print("Pintando en: ", final_point) 
-		
-		# Limitar longitud (Cola más larga = 300 puntos)
-		if trail_line.get_point_count() > 300:
-			trail_line.remove_point(0)
+		for point_data in path_history:
+			var age = time_elapsed - point_data["spawn_time"]
+
+			var growth_factor = min(age * wave_growth_speed, 1.0)
+			var current_wave = sin(point_data["spawn_time"] * wave_frequency) 
+			var final_offset = current_wave * wave_amplitude * growth_factor
+			var final_pos = point_data["center_pos"] + (point_data["normal"] * final_offset)
+			trail_line.add_point(final_pos)
 
 func toggle_mode():
+	# Protección: Si estamos parados, asegurar dirección
 	if particle_mode and aim_dir == Vector2.ZERO: aim_dir = Vector2.RIGHT
-		
+
 	particle_mode = !particle_mode
 	beam_mode = !beam_mode
 	is_transforming = true 
 	
 	if beam_mode:
+		# --- ENTRANDO A MODO LUZ ---
 		sprite.play("to_light")
 		time_elapsed = 0.0
-		if trail_line:
+		
+		if trail_line: 
+			# 1. Aseguramos que sea visible (por si venimos de un fade out)
+			trail_line.modulate.a = 1.0
+			
+			# 2. Reseteamos la línea y el historial
 			trail_line.clear_points()
-			# Punto inicial "pegado" al personaje para empezar el trazo
-			trail_line.add_point(global_position)
+			path_history.clear()
+			
+			# 3. Punto inicial
+			var start_data = {
+				"center_pos": global_position,
+				"normal": aim_dir.orthogonal(),
+				"spawn_time": 0.0
+			}
+			path_history.push_front(start_data)
+			
 	else:
+		# --- SALIENDO A MODO PARTÍCULA (El arreglo está aquí) ---
 		sprite.play("to_particle")
+		
+		if trail_line:
+			# Creamos un Tween para desvanecer la línea suavemente
+			var tween = create_tween()
+			
+			# Hacemos que la propiedad 'modulate:a' (Alpha/Transparencia) baje a 0 en 0.2 segundos
+			tween.tween_property(trail_line, "modulate:a", 0.0, 0.2)
+			
+			# Cuando termine la animación (0.2s después), limpiamos todo
+			tween.tween_callback(func():
+				trail_line.clear_points()
+				path_history.clear()
+			)
 	
 	mode_transition(sprite)
 	if sparkles: mode_transition(sparkles)
@@ -143,7 +164,7 @@ func _on_animation_finished():
 	if sprite.animation == "to_light" or sprite.animation == "to_particle":
 		is_transforming = false
 
-# Funciones auxiliares sin cambios
+
 func mode_transition(node: Node):
 	node.scale = Vector2(0.5, 0.5)
 	var tween = create_tween()
