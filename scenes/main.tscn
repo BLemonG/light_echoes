@@ -56,6 +56,7 @@ layer_1/name = "foreground"
 script = ExtResource("4_m2cq4")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.2, 0.2)
 script = ExtResource("6_fibjp")
 
 [node name="MiniMap" type="TileMap" parent="." groups=["environment"]]
@@ -80,4 +81,19 @@ texture_scale = 6.0
 
 [node name="NextLevelTimer" type="Timer" parent="FireFly"]
 
+[connection signal="body_entered" from="TileMap/Exit" to="TileMap/Exit" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31591" to="TileMap/@Area2D@31591" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31592" to="TileMap/@Area2D@31592" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31593" to="TileMap/@Area2D@31593" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31594" to="TileMap/@Area2D@31594" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31595" to="TileMap/@Area2D@31595" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31596" to="TileMap/@Area2D@31596" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31597" to="TileMap/@Area2D@31597" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31598" to="TileMap/@Area2D@31598" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31599" to="TileMap/@Area2D@31599" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31600" to="TileMap/@Area2D@31600" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31601" to="TileMap/@Area2D@31601" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31602" to="TileMap/@Area2D@31602" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31603" to="TileMap/@Area2D@31603" method="_on_body_entered"]
+[connection signal="body_entered" from="TileMap/@Area2D@31604" to="TileMap/@Area2D@31604" method="_on_body_entered"]
 [connection signal="timeout" from="FireFly/NextLevelTimer" to="FireFly" method="_on_next_level_timer_timeout"]
