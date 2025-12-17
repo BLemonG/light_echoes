@@ -4,14 +4,22 @@ signal effect_added(effect: String)
 signal effect_removed(effecr: String)
 
 var score: int = 0
+var elapsed_time: int = 0
+var current_level: int = 1
+
 var start_time: float = 0.0
 var effects: Array[String] = []
 
 func add_points(points: int):
 	score += points
 	
+func add_level():
+	current_level += 1
+	
 func reset_score():
 	score = 0
+	elapsed_time = 0
+	current_level = 1
 
 func add_effect(effect: String):
 	if effect in effects:

@@ -1,24 +1,24 @@
 [gd_scene load_steps=12 format=3 uid="uid://c25mo4jdm6w75"]
 
-[ext_resource type="Script" uid="uid://bdmpss460mlol" path="res://scripts/Player/PlayerUI.gd" id="1_qrcsu"]
-[ext_resource type="Script" uid="uid://cs2eobtca4g82" path="res://scripts/Player/ScoreLabel.gd" id="2_fhtas"]
-[ext_resource type="Texture2D" uid="uid://clparvd7ida8v" path="res://textures/heart_animated_1.png" id="3_0de7s"]
-[ext_resource type="Texture2D" uid="uid://batp6x3ihw0hk" path="res://textures/64x64.png" id="4_00jy4"]
+[ext_resource type="Script" uid="uid://bdmpss460mlol" path="res://scripts/Player/PlayerUI.gd" id="1_jt14p"]
+[ext_resource type="Script" uid="uid://cs2eobtca4g82" path="res://scripts/Player/ScoreLabel.gd" id="2_cviaw"]
+[ext_resource type="Texture2D" uid="uid://clparvd7ida8v" path="res://textures/heart_animated_1.png" id="3_afog6"]
+[ext_resource type="Texture2D" uid="uid://batp6x3ihw0hk" path="res://textures/64x64.png" id="4_da24e"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pf331"]
-atlas = ExtResource("3_0de7s")
+atlas = ExtResource("3_afog6")
 region = Rect2(0, 0, 17, 17)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b1whj"]
-atlas = ExtResource("3_0de7s")
+atlas = ExtResource("3_afog6")
 region = Rect2(0, 0, 17, 17)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3tn7b"]
-atlas = ExtResource("3_0de7s")
+atlas = ExtResource("3_afog6")
 region = Rect2(17, 0, 17, 17)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_50c3i"]
-atlas = ExtResource("3_0de7s")
+atlas = ExtResource("3_afog6")
 region = Rect2(34, 0, 17, 17)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5mut0"]
@@ -47,15 +47,24 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5mut0"]
-atlas = ExtResource("4_00jy4")
+atlas = ExtResource("4_da24e")
 region = Rect2(386.32504, 3201.3438, 62.95636, 60.02832)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5yfbw"]
-atlas = ExtResource("4_00jy4")
+atlas = ExtResource("4_da24e")
 region = Rect2(393.40747, 4351.1807, 60.028137, 64.42041)
 
 [node name="Node2D" type="CanvasLayer"]
-script = ExtResource("1_qrcsu")
+script = ExtResource("1_jt14p")
+
+[node name="DamageFlash" type="ColorRect" parent="." groups=["HUD"]]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.8039216, 0.09803922, 0.22352941, 0)
 
 [node name="ScoreLabel" type="Label" parent="."]
 anchors_preset = 2
@@ -64,7 +73,7 @@ anchor_bottom = 1.0
 offset_top = -34.0
 offset_right = 40.0
 grow_vertical = 0
-script = ExtResource("2_fhtas")
+script = ExtResource("2_cviaw")
 
 [node name="HealthBar" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(40, 0)
@@ -79,6 +88,7 @@ custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_5mut0")
 animation = &"idle"
 frame_progress = 0.71828413
@@ -88,6 +98,7 @@ custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart2"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_5mut0")
 animation = &"lowLife"
 frame_progress = 0.6505615
@@ -97,6 +108,7 @@ custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HealthBar/Heart3"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_5mut0")
 animation = &"lowLife"
 frame_progress = 0.6505615

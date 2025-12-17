@@ -1,11 +1,13 @@
-[gd_scene load_steps=40 format=3 uid="uid://dyalngqcj1yvh"]
+[gd_scene load_steps=45 format=3 uid="uid://dyalngqcj1yvh"]
 
 [ext_resource type="Script" uid="uid://7ryoxqe1gyvq" path="res://scripts/Player/FireFly.gd" id="1_bo3ie"]
 [ext_resource type="Texture2D" uid="uid://dy12x3d8m23kq" path="res://textures/Assets/Firefly.png" id="2_d78j5"]
-[ext_resource type="PackedScene" uid="uid://fu5mrgive83m" path="res://scenes/Player/Beam.tscn" id="3_bjiw6"]
 [ext_resource type="Texture2D" uid="uid://kjnkpxy2h384" path="res://textures/Assets/ball2.png" id="3_lb2sn"]
-[ext_resource type="PackedScene" uid="uid://c25mo4jdm6w75" path="res://scenes/Player/PlayerUI.tscn" id="4_y75uk"]
+[ext_resource type="PackedScene" uid="uid://c25mo4jdm6w75" path="res://scenes/UI/PlayerUI.tscn" id="4_y75uk"]
 [ext_resource type="PackedScene" uid="uid://du4x8pws7r0i" path="res://scenes/Player/Sparkle.tscn" id="5_d78j5"]
+[ext_resource type="AudioStream" uid="uid://dwsejgmtkvwfm" path="res://audio/sounds/enemies/BatWingFlap2.wav" id="6_axwqd"]
+[ext_resource type="AudioStream" uid="uid://dm66dpe2jtfsc" path="res://audio/sounds/enemies/FireflyTransform.wav" id="7_bg4pc"]
+[ext_resource type="AudioStream" uid="uid://c0miy8gbqpm3d" path="res://audio/sounds/enemies/LightSound.wav" id="8_dl75d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bo3ie"]
 size = Vector2(19, 18)
@@ -212,7 +214,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"to_light",
-"speed": 10.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -247,8 +249,19 @@ animations = [{
 }],
 "loop": false,
 "name": &"to_particle",
-"speed": 10.0
+"speed": 20.0
 }]
+
+[sub_resource type="Curve" id="Curve_lb2sn"]
+_data = [Vector2(0, 0.70786524), 0.0, 0.0, 0, 0, Vector2(0.5380435, 0.6516854), 0.0, 0.0, 0, 0, Vector2(1, 0.078651786), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_6jcmr"]
+offsets = PackedFloat32Array(0.26027396, 0.7123288, 1)
+colors = PackedColorArray(1, 0.84313726, 0, 1, 1, 0.5529412, 0, 0.4509804, 1, 0.99215686, 0.8627451, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d78j5"]
+radius = 14.0
 
 [node name="FireFly" type="CharacterBody2D"]
 script = ExtResource("1_bo3ie")
@@ -260,14 +273,50 @@ shape = SubResource("RectangleShape2D_bo3ie")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ckns8")
-animation = &"to_particle"
+animation = &"to_light"
 
-[node name="BeamLine" type="Line2D" parent="."]
+[node name="TrailLine" type="Line2D" parent="."]
 texture_filter = 1
-
-[node name="Beam" parent="." instance=ExtResource("3_bjiw6")]
+width_curve = SubResource("Curve_lb2sn")
+gradient = SubResource("Gradient_6jcmr")
+joint_mode = 2
 
 [node name="PlayerUI" parent="." instance=ExtResource("4_y75uk")]
 
 [node name="Sparkle" parent="." instance=ExtResource("5_d78j5")]
 texture_filter = 1
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_mask = 31
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_d78j5")
+
+[node name="FlyingSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_axwqd")
+volume_db = -9.541
+pitch_scale = 30.0
+
+[node name="TransformSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bg4pc")
+volume_db = -3.817
+pitch_scale = 3.2
+
+[node name="ReboteSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bg4pc")
+volume_db = -7.634
+pitch_scale = 10.0
+
+[node name="MirrorReboteSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bg4pc")
+volume_db = -7.634
+pitch_scale = 10.0
+
+[node name="LightSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_dl75d")
+volume_db = -3.817
+pitch_scale = 1.26
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

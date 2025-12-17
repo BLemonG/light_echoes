@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 [autoload]
 
 PlayerStats="*res://scripts/Singleton/PlayerStats.gd"
+ScoreSaver="*res://scripts/Singleton/score_saver.gd"
 
 [display]
 
@@ -26,6 +27,9 @@ window/stretch/aspect="expand"
 [global_group]
 
 player=""
+HUD=""
+enemies=""
+mirrors=""
 
 [input]
 
