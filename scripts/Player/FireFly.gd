@@ -12,8 +12,6 @@ class_name Player
 @onready var rebote_sound: AudioStreamPlayer2D = $ReboteSound
 @onready var mirror_rebote_sound: AudioStreamPlayer2D = $MirrorReboteSound
 
-
-
 var SPEED = 220.0 
 @export var SPEED_LIGHT = 240.0 
 @export var wave_frequency: float = 20.0 
@@ -174,7 +172,8 @@ func take_damage():
 	if health > 1:
 		health -= 1
 		update_heart_display()
-		get_tree().call_group("HUD", "damage_flash")
+		if ui and ui.has_method("damage_flash"):
+			ui.damage_flash()
 	else:
 		die()
 
@@ -204,7 +203,6 @@ func _on_next_level_timer_timeout() -> void:
 	PlayerStats.add_level()
 	get_tree().call_deferred("reload_current_scene")
 
-# Getters
 func is_particle_mode(): return particle_mode
 func is_beam_mode(): return beam_mode
 func get_beam_origin(): return global_position
