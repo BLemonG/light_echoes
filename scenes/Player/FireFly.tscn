@@ -304,6 +304,16 @@ stream = ExtResource("7_bg4pc")
 volume_db = -3.817
 pitch_scale = 3.2
 
+[node name="ReboteSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bg4pc")
+volume_db = -7.634
+pitch_scale = 10.0
+
+[node name="MirrorReboteSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_bg4pc")
+volume_db = -7.634
+pitch_scale = 10.0
+
 [node name="LightSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_dl75d")
 volume_db = -3.817

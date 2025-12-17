@@ -30,16 +30,29 @@ func perform_chase(delta):
 	update_sprite_and_ray("flying", "left")
 	move_and_slide()
 
+var is_attacking: bool = false
+
 func perform_attack(delta):
-	if not attack_cooldown.is_stopped():
-		velocity = Vector2.ZERO	 #fly without attack
+	if is_attacking:
+		velocity = velocity.move_toward(Vector2.ZERO, 100 * delta)
+		move_and_slide()
 		return
+
+	if not attack_cooldown.is_stopped():
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+	start_attack_sequence()
+
+func start_attack_sequence():
+	is_attacking = true
+	update_sprite_and_ray("attack", "left") 
+	animated.play("attack")
+	velocity = direction * (SPEED * 1.5)
+	await animated.animation_finished
 	bite()
 	attack_cooldown.start()
-	velocity = velocity.move_toward(direction * SPEED, 200 * delta)
-	update_sprite_and_ray("attack", "left")
-
-	move_and_slide()
+	is_attacking = false
 	
 func bite():
 	player.take_damage()

@@ -9,6 +9,8 @@ class_name Player
 @onready var flying_sound: AudioStreamPlayer2D = $FlyingSound
 @onready var transform_sound: AudioStreamPlayer2D = $TransformSound
 @onready var lightSound: AudioStreamPlayer2D = $LightSound
+@onready var rebote_sound: AudioStreamPlayer2D = $ReboteSound
+@onready var mirror_rebote_sound: AudioStreamPlayer2D = $MirrorReboteSound
 
 
 
@@ -70,6 +72,8 @@ func _physics_process(delta):
 			remove_status_effect("slimed")
 
 	move_and_slide()
+	if beam_mode and get_slide_collision_count() > 0:
+		handle_beam_reflection()
 	
 	if sparkles: sparkles.emitting = particle_mode
 
@@ -78,7 +82,7 @@ func move_particle():
 		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	)
-	
+	sprite.rotation = 0
 	if input != Vector2.ZERO:
 		aim_dir = input.normalized() 
 		velocity = aim_dir * SPEED
@@ -91,6 +95,7 @@ func move_particle():
 func move_light(delta: float):
 	if aim_dir == Vector2.ZERO: aim_dir = Vector2.RIGHT
 	velocity = aim_dir * SPEED_LIGHT
+	sprite.rotation = aim_dir.angle()
 	
 	if trail_line:
 		time_elapsed += delta
@@ -204,6 +209,23 @@ func is_particle_mode(): return particle_mode
 func is_beam_mode(): return beam_mode
 func get_beam_origin(): return global_position
 func get_beam_direction(): return aim_dir
+
+func handle_beam_reflection():
+	var collision = get_slide_collision(0)
+	var collider = collision.get_collider()
+	var normal = collision.get_normal()
+	
+	if not collider.is_in_group("enemies"):
+		aim_dir = aim_dir.bounce(normal)
+		velocity = velocity.bounce(normal)
+		sprite.rotation = aim_dir.angle()
+		
+		if collider.is_in_group("mirrors"):
+			mirror_rebote_sound.play()
+		else:
+			rebote_sound.play()
+			
+		global_position += aim_dir * 2.0
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if beam_mode:

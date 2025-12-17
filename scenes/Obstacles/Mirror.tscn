@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ca7tr044gvkim" path="res://scripts/Obstacles/Mirror.gd" id="1_n6qsb"]
 [ext_resource type="Texture2D" uid="uid://bummkd0iwqivu" path="res://textures/Enemies/64x64.png" id="2_0ngtr"]
 
-[node name="Mirror" type="StaticBody2D" groups=["Mirror"]]
+[node name="Mirror" type="StaticBody2D" groups=["mirrors"]]
 script = ExtResource("1_n6qsb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

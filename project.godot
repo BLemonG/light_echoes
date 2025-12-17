@@ -28,8 +28,8 @@ window/stretch/aspect="expand"
 
 player=""
 HUD=""
-Mirror=""
 enemies=""
+mirrors=""
 
 [input]
 
