@@ -64,7 +64,6 @@ script = ExtResource("1_hsnng")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(170, 172.5)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_nlui7")
 
 [node name="TextureRect" type="TextureRect" parent="."]
