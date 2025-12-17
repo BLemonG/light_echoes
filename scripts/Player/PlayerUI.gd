@@ -5,7 +5,8 @@ extends CanvasLayer
 @onready var container: HBoxContainer = $StatusEffectsContainer
 @onready var effect_icons = {
 	"webbed": $StatusEffectsContainer/WebbedIcon,
-	"slimed": $StatusEffectsContainer/SlimedIcon
+	"slimed": $StatusEffectsContainer/SlimedIcon,
+	"speedy": $StatusEffectsContainer/SpeedIcon
 }
 @onready var damage_flash_rect = $DamageFlash
 

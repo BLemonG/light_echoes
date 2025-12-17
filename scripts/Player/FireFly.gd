@@ -19,6 +19,7 @@ class_name Player
 @export var wave_growth_speed: float = 8.0 
 
 var SPEED = BASE_SPEED 
+var SPEED_LIGHT = BASE_SPEED
 var particle_mode := true
 var beam_mode := false
 var is_transforming := false 
@@ -26,11 +27,15 @@ var aim_dir = Vector2.RIGHT
 var time_elapsed: float = 0.0
 var slimed = false
 var slimed_timer: float = 0.0
+var fast = false
+var speed_timer: float = 0.0
 var path_history: Array = []
 var current_gravity: float = 0.0
+@export var SPEED_TIMER = 5.0
 @export var SLIMED_TIMER = 5.0
 @export var SLIME_GRAVITY: float = 6000.0
 @export var WEBBED_MULT: float = 0.5
+@export var SPEED_MULT: float = 2.0
 
 var hearts_list: Array[TextureRect] = []
 var health = 3
@@ -63,6 +68,11 @@ func _physics_process(delta):
 		slimed_timer -= delta
 		if slimed_timer <= 0:
 			remove_status_effect("slimed")
+	
+	if fast:
+		speed_timer -= delta
+		if speed_timer <= 0:
+			remove_status_effect("speedy")
 			
 	if beam_mode:
 		move_light(delta)
@@ -100,7 +110,7 @@ func move_particle():
 
 func move_light(delta: float):
 	if aim_dir == Vector2.ZERO: aim_dir = Vector2.RIGHT
-	velocity = aim_dir * SPEED  
+	velocity = aim_dir * SPEED_LIGHT
 	sprite.rotation = aim_dir.angle()
 	
 	if trail_line:
@@ -128,12 +138,18 @@ func move_light(delta: float):
 
 func recalc_effects():
 	SPEED = BASE_SPEED
+	SPEED_LIGHT = BASE_SPEED
 	current_gravity = 0.0
 	
 	if PlayerStats.has_effect("webbed"):
 		SPEED *= WEBBED_MULT
+		SPEED_LIGHT *= WEBBED_MULT
+		
 	if PlayerStats.has_effect("slimed"):
 		current_gravity = SLIME_GRAVITY
+		
+	if PlayerStats.has_effect("speedy"):
+		SPEED_LIGHT *= SPEED_MULT
 		
 func toggle_mode():
 	if particle_mode and aim_dir == Vector2.ZERO: aim_dir = Vector2.RIGHT
@@ -211,6 +227,10 @@ func apply_status_effect(effect: String):
 		
 	if effect == "webbed": 
 		pass	#handled by recalc_effects()
+	
+	if effect == "speedy":
+		fast = true
+		speed_timer = SPEED_TIMER
 		
 	if effect == "slimed": 
 		slimed = true
@@ -224,6 +244,10 @@ func remove_status_effect(effect: String):
 		
 	if effect == "webbed": 
 		pass	#handled by recalc_effects()
+	
+	if effect == "speedy":
+		fast = false
+		speed_timer = 0.0
 		
 	if effect == "slimed": 
 		slimed = false
@@ -257,6 +281,7 @@ func handle_beam_reflection():
 		
 		if collider.is_in_group("mirrors"):
 			mirror_rebote_sound.play()
+			apply_status_effect("speedy")
 		else:
 			rebote_sound.play()
 			
