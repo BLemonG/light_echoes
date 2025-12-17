@@ -176,7 +176,7 @@ func take_damage():
 func die():
 	if not dead:
 		dead = true
-		ScoreSaver.save_score(PlayerStats.score)
+		ScoreSaver.save_score(PlayerStats.score, PlayerStats.current_level)
 		get_tree().change_scene_to_file("res://scenes/game_over.tscn")
 
 func update_heart_display():
@@ -195,7 +195,9 @@ func remove_status_effect(effect: String):
 	if effect == "slimed": pass
 
 func go_to_next_level(): next_level_timer.start()
-func _on_next_level_timer_timeout() -> void: get_tree().call_deferred("reload_current_scene")
+func _on_next_level_timer_timeout() -> void: 
+	PlayerStats.add_level()
+	get_tree().call_deferred("reload_current_scene")
 
 # Getters
 func is_particle_mode(): return particle_mode
